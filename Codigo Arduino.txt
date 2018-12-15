@@ -1,0 +1,66 @@
+long dis;
+long tiem;
+int rojo = 11;
+int verde = 3;
+int amarillo = 2;
+int buzzer = 5;
+
+void setup( ){
+Serial.begin(9600);
+pinMode(10, OUTPUT); //salida del pulso generado por el sensor ultrasónico
+pinMode(9, INPUT);//entrada del pulso generado por el sensor ultrasónico
+pinMode(11, OUTPUT);//alarma de la distancia(encenderá el led rojo)
+pinMode(5, OUTPUT);//alarma de la distancia(prende el buzzer)
+pinMode(2, OUTPUT);//alarma de la distancia(encenderá el led amarillo)
+pinMode(3, OUTPUT);//alarma de la distancia(encenderá el led  verde)
+}
+void loop(){
+digitalWrite(10,LOW);//recibimiento del pulso.
+delayMicroseconds(5);
+digitalWrite(10, HIGH);//envió del pulso.
+delayMicroseconds(10);
+tiem=pulseIn(9, HIGH);//fórmula para medir el pulso entrante.
+dis= long(0.017*tiem);//fórmula para calcular la distancia del sensor ultrasónico.
+
+if(dis < 30 && dis >= 20)//condicional para indicar que led y sonido hacer segun la distancia en que se retorna el puslo 
+{ 
+digitalWrite(3, HIGH);
+delay(50);   
+digitalWrite(3, LOW);
+delay(50); 
+digitalWrite(2, LOW);
+digitalWrite(11, LOW);
+tone(5, 2000, 200);
+}
+else if(dis < 20 && dis > 10)
+{
+digitalWrite(2,HIGH);
+delay(50);   
+digitalWrite(2, LOW);
+delay(50);
+digitalWrite(11, LOW);
+digitalWrite(3, LOW);
+tone(5, 2500, 200);
+}
+else if(dis <= 10)
+{
+digitalWrite(11,HIGH);
+delay(50);   
+digitalWrite(11, LOW);
+delay(50);
+digitalWrite(2, LOW);
+digitalWrite(3, LOW);
+tone(5, 3000, 200);
+}
+
+else if(dis > 30) 
+{
+digitalWrite(11, LOW);
+digitalWrite(3, LOW);
+digitalWrite(2, LOW);
+}
+Serial.println("LA DISTANCIA MEDIDA ES:");
+Serial.println(dis);
+Serial.println("cm");
+delay(500);
+}
